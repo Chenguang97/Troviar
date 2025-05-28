@@ -1,12 +1,13 @@
 package com.troviar.protector;
 
+import com.troviar.protector.core.ModEntities;
+import com.troviar.protector.entity.TroviarEntity;
+import com.troviar.protector.core.ModItems;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 
 
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 

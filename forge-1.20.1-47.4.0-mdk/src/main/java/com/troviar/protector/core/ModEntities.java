@@ -1,9 +1,10 @@
-package com.troviar.protector;
+package com.troviar.protector.core;
 
+import com.troviar.protector.TroviarMod;
+import com.troviar.protector.entity.TroviarEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;

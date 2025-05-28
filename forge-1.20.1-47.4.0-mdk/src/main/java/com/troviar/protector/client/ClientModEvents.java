@@ -1,6 +1,8 @@
-package com.troviar.protector;
+package com.troviar.protector.client;
 
-import com.troviar.protector.TroviarRenderer;
+import com.troviar.protector.TroviarMod;
+import com.troviar.protector.client.renderer.TroviarRenderer;
+import com.troviar.protector.core.ModEntities;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

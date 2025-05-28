@@ -1,9 +1,8 @@
-package com.troviar.protector;
+package com.troviar.protector.client.renderer;
 
-import com.troviar.protector.TroviarEntity;
+import com.troviar.protector.entity.TroviarEntity;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.model.ZombieModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -16,6 +15,6 @@ public class TroviarRenderer extends MobRenderer<TroviarEntity, HumanoidModel<Tr
 
     @Override
     public ResourceLocation getTextureLocation(TroviarEntity entity) {
-        return ResourceLocation.fromNamespaceAndPath("troviar", "textures/entity/troviar.png");
+        return ResourceLocation.fromNamespaceAndPath("troviar", "textures/entity/troviar1.png");
     }
 }
