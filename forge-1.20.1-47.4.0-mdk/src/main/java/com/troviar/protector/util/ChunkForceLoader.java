@@ -27,11 +27,13 @@ public class ChunkForceLoader {
 
         if (last != null && !last.equals(current)) {
             serverLevel.setChunkForced(last.x, last.z, false); // 释放旧的
+            System.out.println("chuck release");
         }
 
         if (last == null || !last.equals(current)) {
             serverLevel.setChunkForced(current.x, current.z, true); // 加载新的
             trackedEntities.put(entity, current);
+            System.out.println("chuck loaded");
         }
     }
 

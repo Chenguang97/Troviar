@@ -1,5 +1,6 @@
 package com.troviar.protector.entity;
 
+import com.troviar.protector.event.TroviarCombatWatcher;
 import com.troviar.protector.util.ChunkForceLoader;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.*;
@@ -27,7 +28,7 @@ import java.util.UUID;
 
 
 public class TroviarEntity extends PathfinderMob {
-    private UUID ownerUuid;              // 主人 UUID（召唤/绑定的玩家）
+    private UUID ownerUuid = UUID.fromString("380df991-f603-344c-a090-369bad2a924a");// 主人 UUID（召唤/绑定的玩家）
     private boolean inCombat = false;   // 是否进入战斗模式
     private BlockPos homePosition;      // 家园坐标
     private ChunkPos lastChunk = null;
@@ -85,20 +86,20 @@ public class TroviarEntity extends PathfinderMob {
         if (this.level().isClientSide || this.inCombat) return;
 
         Player trigger = getCombatTrigger();
-        if (trigger != null) {
+        if (trigger != null && TroviarCombatWatcher.wasRecentlyAttacked(trigger.getUUID())) {
             // 传送到触发战斗的玩家身边
             System.out.println("Troviar ticked");
             this.teleportTo(trigger.getX(), trigger.getY(), trigger.getZ());
             System.out.println("Troviar teleportTo");
             enterCombatMode();
 
+//            LivingEntity preferred = findAttackerOfOwner();
+//            setTarget(preferred != null ? preferred : findNearestHostile());
+
             // 优先寻找正在攻击主人的怪物
             LivingEntity preferred = findAttackerOfOwner();
-            if (preferred != null) {
-                this.setTarget(preferred);
-            } else {
-                this.setTarget(findNearestHostile());
-            }
+            setTarget(preferred != null ? preferred : findNearestHostile());
+
         }
 
     }
@@ -115,7 +116,7 @@ public class TroviarEntity extends PathfinderMob {
             if (hp < max) {
                 if (player.getUUID().equals(this.ownerUuid)) return player; // 🥇 本人
                 if (player.getName().getString().contains("光")) result = player; // 🥈 名含"光"
-                else if (result == null) result = player; // 🥉 其他低血玩家
+                else if (result == null) result = null; // 🥉 其他低血玩家!!!!!代改
             }
         }
         return result;
@@ -125,6 +126,7 @@ public class TroviarEntity extends PathfinderMob {
     public void enterCombatMode() {
         this.inCombat = true;
         this.goalSelector.removeAllGoals(goal -> true);
+        this.targetSelector.removeAllGoals(goal -> true);
         this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1.2, true));
         this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Monster.class, true));
 
