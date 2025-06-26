@@ -81,10 +81,13 @@ public class TroviarEntity extends PathfinderMob {
     @Override
     public void aiStep() {
         super.aiStep();
+        System.out.printf("[Troviar] Position: x=%.3f, y=%.3f, z=%.3f%n", this.getX(), this.getY(), this.getZ());
+
         ChunkForceLoader.tick(this);
+//        System.out.println("Troviar is loaded");
 
-        if (this.level().isClientSide || this.inCombat) return;
-
+        if (this.level().isClientSide || this.inCombat) {;return;}
+//        System.out.println("Troviar is passed return");
         Player trigger = getCombatTrigger();
         if (trigger != null && TroviarCombatWatcher.wasRecentlyAttacked(trigger.getUUID())) {
             // 传送到触发战斗的玩家身边
