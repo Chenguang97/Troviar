@@ -2,6 +2,8 @@ package com.troviar.protector.entity;
 
 import com.troviar.protector.event.TroviarCombatWatcher;
 import com.troviar.protector.util.ChunkForceLoader;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -21,6 +23,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -86,14 +89,48 @@ public class TroviarEntity extends PathfinderMob {
         ChunkForceLoader.tick(this);
 //        System.out.println("Troviar is loaded");
 
-        if (this.level().isClientSide || this.inCombat) {;return;}
+        //--------
+        UUID targetId = UUID.fromString("380df991-f603-344c-a090-369bad2a924a"); // 你的123举例
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+
+        ServerPlayer player = server.getPlayerList().getPlayer(targetId);
+        //--------
+//        if (player != null) {
+//            System.out.println("user yes!");
+//        } else {
+//            // 玩家不在线
+//        }
+
+//        if (this.level().isClientSide || this.inCombat) {;return;}
 //        System.out.println("Troviar is passed return");
         Player trigger = getCombatTrigger();
-        if (trigger != null && TroviarCombatWatcher.wasRecentlyAttacked(trigger.getUUID())) {
+//        if (trigger != null && TroviarCombatWatcher.wasRecentlyAttacked(trigger.getUUID())) {
+        if (player == null) {
+
+            System.out.println("cant find master");
+        }
+        if (player != null) {
+
             // 传送到触发战斗的玩家身边
-            System.out.println("Troviar ticked");
-            this.teleportTo(trigger.getX(), trigger.getY(), trigger.getZ());
-            System.out.println("Troviar teleportTo");
+            System.out.println("not null should transpot");
+
+//            System.out.println("Troviar ticked");
+            System.out.println(player.getX() +" " +player.getY() +" " +player.getZ());
+//            this.teleportTo(player.getX(), player.getY(), player.getZ());
+            MyScheduler.runLater(() -> {
+                System.out.println("MyScheduler start");
+                // 再次确认玩家和 npc 还活着
+                if (player != null) {
+                    this.teleportTo(
+                            player.getX(),
+                            player.getY(),
+                            player.getZ());
+                }
+                System.out.println("MyScheduler done");
+            }, 500);
+            System.out.println("tt"+this.getX() +" " +this.getY() +" " +this.getZ());
+
+            System.out.println("MyScheduler ok");
             enterCombatMode();
 
 //            LivingEntity preferred = findAttackerOfOwner();
